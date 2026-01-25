@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SearXNG (HF Space) Search</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <h1>SearXNG Space Search</h1>
+      <p class="sub">
+        Tip: use the Space’s direct <code>*.hf.space</code> URL for best results.
+      </p>
+
+      <form id="searchForm" class="bar" autocomplete="off">
+        <input id="q" type="text" placeholder="Search…" />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="hint">
+        Current target:
+        <code id="targetUrl"></code>
+      </div>
+    </header>
+
+    <main class="frameBox">
+      <iframe
+        id="frame"
+        title="SearXNG Space"
+        referrerpolicy="no-referrer"
+        loading="lazy"
+      ></iframe>
+    </main>
+  </div>
+
+  <script>
+    // IMPORTANT:
+    // Replace this with the direct Space URL shown under "Embed this Space" → "Direct URL"
+    // It will look like: https://xlnk-search.hf.space
+    const SPACE_DIRECT_URL = "https://xlnk-search.hf.space";
+
+    const form = document.getElementById("searchForm");
+    const qInput = document.getElementById("q");
+    const frame = document.getElementById("frame");
+    const targetUrlEl = document.getElementById("targetUrl");
+
+    function buildUrl(q) {
+      const url = new URL(SPACE_DIRECT_URL);
+      // Many SearXNG UIs accept ?q=...
+      // If this particular Space uses a different param, change "q" to whatever it expects.
+      url.searchParams.set("q", q);
+      return url.toString();
+    }
+
+    function loadQuery(q) {
+      const url = buildUrl(q);
+      targetUrlEl.textContent = url;
+      frame.src = url;
+    }
+
+    // Load from ?q= on your own page too
+    const pageUrl = new URL(window.location.href);
+    const initialQ = pageUrl.searchParams.get("q") || "";
+    if (initialQ) {
+      qInput.value = initialQ;
+      loadQuery(initialQ);
+    } else {
+      targetUrlEl.textContent = SPACE_DIRECT_URL;
+      frame.src = SPACE_DIRECT_URL;
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = (qInput.value || "").trim();
+      if (!q) return;
+
+      // Update your page URL (nice for sharing)
+      const newPageUrl = new URL(window.location.href);
+      newPageUrl.searchParams.set("q", q);
+      history.replaceState({}, "", newPageUrl.toString());
+
+      loadQuery(q);
+    });
+  </script>
+</body>
+</html>
