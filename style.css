@@ -1,87 +1,141 @@
-:root {
-  --bg: #0b0c10;
-  --card: #12141a;
-  --text: #e7e9ee;
-  --muted: #9aa3b2;
-  --border: #232633;
+:root{
+  --orange:#ff7a00;
+  --orange2:#ff8f2a;
+  --white:#ffffff;
+  --bg:#fff7f0;
+  --text:#151515;
+  --muted:#6b6b6b;
+  --card:#ffffff;
+  --border:#f0d9c6;
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
-.wrap {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
+.top{
+  padding:18px 16px 10px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, #ffffff 0%, #fff7f0 100%);
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
-.top {
-  padding: 18px 16px 12px;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #0b0c10 0%, #0b0c10 60%, #0a0b0f 100%);
+.brand{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;}
+.logo{
+  font-weight:800;
+  letter-spacing:.2px;
+  color:var(--orange);
+  font-size:22px;
+}
+.tag{color:var(--muted); font-size:12px;}
+
+.searchbar{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+}
+.searchbar input{
+  flex:1;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--white);
+  outline:none;
+}
+.searchbar button{
+  padding:12px 16px;
+  border-radius:14px;
+  border:1px solid var(--orange);
+  background:var(--orange);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+.searchbar button:hover{filter:brightness(1.03)}
+
+.controls{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns: 180px 1fr 160px;
+  gap:10px;
+}
+.control label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.control select, .control input{
+  width:100%;
+  padding:10px 10px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--white);
+  outline:none;
 }
 
-h1 {
-  margin: 0 0 6px;
-  font-size: 18px;
-  letter-spacing: 0.2px;
+.tabs{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+}
+.tab{
+  border:1px solid var(--border);
+  background:#fff;
+  padding:8px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  color:var(--text);
+  font-weight:600;
+}
+.tab.active{
+  border-color:var(--orange);
+  background:rgba(255,122,0,.12);
+  color:var(--orange);
 }
 
-.sub {
-  margin: 0 0 12px;
-  color: var(--muted);
-  font-size: 13px;
+.main{padding:14px 16px;}
+.status{color:var(--muted); font-size:13px; margin-bottom:10px;}
+
+.results{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
 }
 
-.bar {
-  display: flex;
-  gap: 10px;
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px 12px;
+}
+.title{
+  font-weight:800;
+  margin:0 0 6px;
+}
+.title a{
+  color:var(--text);
+  text-decoration:none;
+}
+.title a:hover{color:var(--orange)}
+.meta{color:var(--muted); font-size:12px; overflow-wrap:anywhere;}
+.snip{margin-top:8px; color:#2a2a2a; font-size:14px; line-height:1.35;}
+
+.thumbRow{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.thumb{
+  width:140px;
+  max-width:40%;
+  border-radius:12px;
+  border:1px solid var(--border);
 }
 
-.bar input {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--text);
-  outline: none;
-}
-
-.bar button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #1a1f2b;
-  color: var(--text);
-  cursor: pointer;
-}
-
-.bar button:hover {
-  filter: brightness(1.08);
-}
-
-.hint {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-
-.frameBox {
-  padding: 12px;
-}
-
-iframe {
-  width: 100%;
-  height: calc(100vh - 150px);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #0f1116;
-}
