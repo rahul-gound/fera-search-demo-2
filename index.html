@@ -9,38 +9,67 @@
 <body>
   <header class="top">
     <div class="brand">
-      <div class="logo">fera-search</div>
-      <div class="tag">Powered by SearXNG backend</div>
-    </div>
-
-    <form id="searchForm" class="searchbar" autocomplete="off">
-      <input id="q" type="text" placeholder="Search the web…" />
-      <button type="submit">Search</button>
-    </form>
-
-    <div class="controls">
-      <div class="control">
-        <label>SafeSearch</label>
-        <select id="safesearch">
-          <option value="moderate" selected>Moderate</option>
-          <option value="strict">Strict</option>
-          <option value="off">Off</option>
-        </select>
-      </div>
-
-      <div class="control">
-        <label>Location</label>
-        <input id="location" type="text" placeholder="e.g. India, Delhi, near me" />
-      </div>
-
-      <div class="control">
-        <label>Language</label>
-        <select id="lang">
-          <option value="en" selected>English</option>
-          <option value="hi">Hindi</option>
-        </select>
+      <div class="logo-mark" aria-hidden="true">F</div>
+      <div>
+        <div class="logo">fera-search</div>
+        <div class="tag">Orange-powered search via SearXNG</div>
       </div>
     </div>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Fast. Safe. Bright.</p>
+        <h1>Search the open web with a vibrant orange experience.</h1>
+        <p class="lead">Run flexible queries, tune SafeSearch, and focus results by location — all in a clean white-and-orange workspace.</p>
+        <div class="pill-row">
+          <span class="pill">No login required</span>
+          <span class="pill">Powered by HF Space</span>
+          <span class="pill">SearXNG compatible</span>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <form id="searchForm" class="searchbar" autocomplete="off">
+          <input id="q" type="text" placeholder="Search the web…" />
+          <button type="submit">Search</button>
+        </form>
+
+        <div class="controls">
+          <div class="control">
+            <label for="safesearch">SafeSearch</label>
+            <select id="safesearch">
+              <option value="moderate" selected>Moderate</option>
+              <option value="off">Off</option>
+              <option value="strict">Strict</option>
+            </select>
+          </div>
+
+          <div class="control">
+            <label for="location">Search by location</label>
+            <input id="location" type="text" placeholder="e.g. India, Delhi, near me" />
+          </div>
+
+          <div class="control">
+            <label for="lang">Language</label>
+            <select id="lang">
+              <option value="en" selected>English</option>
+              <option value="hi">Hindi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="helper-row">
+          <div class="helper">
+            <span class="helper-title">Endpoint</span>
+            <span class="helper-value">https://xlnk-search.hf.space/search</span>
+          </div>
+          <div class="helper">
+            <span class="helper-title">SafeSearch</span>
+            <span class="helper-value">moderate · off · strict</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <nav class="tabs" role="tablist">
       <button class="tab active" data-tab="all" type="button">All</button>
@@ -57,4 +86,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
