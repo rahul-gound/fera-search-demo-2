@@ -3,86 +3,58 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SearXNG (HF Space) Search</title>
+  <title>fera-search</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
-      <h1>SearXNG Space Search</h1>
-      <p class="sub">
-        Tip: use the Space’s direct <code>*.hf.space</code> URL for best results.
-      </p>
+  <header class="top">
+    <div class="brand">
+      <div class="logo">fera-search</div>
+      <div class="tag">Powered by SearXNG backend</div>
+    </div>
 
-      <form id="searchForm" class="bar" autocomplete="off">
-        <input id="q" type="text" placeholder="Search…" />
-        <button type="submit">Search</button>
-      </form>
+    <form id="searchForm" class="searchbar" autocomplete="off">
+      <input id="q" type="text" placeholder="Search the web…" />
+      <button type="submit">Search</button>
+    </form>
 
-      <div class="hint">
-        Current target:
-        <code id="targetUrl"></code>
+    <div class="controls">
+      <div class="control">
+        <label>SafeSearch</label>
+        <select id="safesearch">
+          <option value="moderate" selected>Moderate</option>
+          <option value="strict">Strict</option>
+          <option value="off">Off</option>
+        </select>
       </div>
-    </header>
 
-    <main class="frameBox">
-      <iframe
-        id="frame"
-        title="SearXNG Space"
-        referrerpolicy="no-referrer"
-        loading="lazy"
-      ></iframe>
-    </main>
-  </div>
+      <div class="control">
+        <label>Location</label>
+        <input id="location" type="text" placeholder="e.g. India, Delhi, near me" />
+      </div>
 
-  <script>
-    // IMPORTANT:
-    // Replace this with the direct Space URL shown under "Embed this Space" → "Direct URL"
-    // It will look like: https://xlnk-search.hf.space
-    const SPACE_DIRECT_URL = "https://xlnk-search.hf.space";
+      <div class="control">
+        <label>Language</label>
+        <select id="lang">
+          <option value="en" selected>English</option>
+          <option value="hi">Hindi</option>
+        </select>
+      </div>
+    </div>
 
-    const form = document.getElementById("searchForm");
-    const qInput = document.getElementById("q");
-    const frame = document.getElementById("frame");
-    const targetUrlEl = document.getElementById("targetUrl");
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="all" type="button">All</button>
+      <button class="tab" data-tab="images" type="button">Images</button>
+      <button class="tab" data-tab="videos" type="button">Videos</button>
+    </nav>
+  </header>
 
-    function buildUrl(q) {
-      const url = new URL(SPACE_DIRECT_URL);
-      // Many SearXNG UIs accept ?q=...
-      // If this particular Space uses a different param, change "q" to whatever it expects.
-      url.searchParams.set("q", q);
-      return url.toString();
-    }
+  <main class="main">
+    <div id="status" class="status"></div>
+    <div id="results" class="results"></div>
+  </main>
 
-    function loadQuery(q) {
-      const url = buildUrl(q);
-      targetUrlEl.textContent = url;
-      frame.src = url;
-    }
-
-    // Load from ?q= on your own page too
-    const pageUrl = new URL(window.location.href);
-    const initialQ = pageUrl.searchParams.get("q") || "";
-    if (initialQ) {
-      qInput.value = initialQ;
-      loadQuery(initialQ);
-    } else {
-      targetUrlEl.textContent = SPACE_DIRECT_URL;
-      frame.src = SPACE_DIRECT_URL;
-    }
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const q = (qInput.value || "").trim();
-      if (!q) return;
-
-      // Update your page URL (nice for sharing)
-      const newPageUrl = new URL(window.location.href);
-      newPageUrl.searchParams.set("q", q);
-      history.replaceState({}, "", newPageUrl.toString());
-
-      loadQuery(q);
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
+
