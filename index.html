@@ -38,23 +38,15 @@
           <div class="control">
             <label for="safesearch">SafeSearch</label>
             <select id="safesearch">
-              <option value="moderate" selected>Moderate</option>
-              <option value="off">Off</option>
-              <option value="strict">Strict</option>
+              <option value="1" selected>Moderate</option>
+              <option value="0">Off</option>
+              <option value="2">Strict</option>
             </select>
           </div>
 
           <div class="control">
-            <label for="location">Search by location</label>
+            <label for="location">Location (optional)</label>
             <input id="location" type="text" placeholder="e.g. India, Delhi, near me" />
-          </div>
-
-          <div class="control">
-            <label for="lang">Language</label>
-            <select id="lang">
-              <option value="en" selected>English</option>
-              <option value="hi">Hindi</option>
-            </select>
           </div>
         </div>
 
@@ -65,7 +57,11 @@
           </div>
           <div class="helper">
             <span class="helper-title">SafeSearch</span>
-            <span class="helper-value">moderate · off · strict</span>
+            <span class="helper-value">0 · 1 · 2 (off · moderate · strict)</span>
+          </div>
+          <div class="helper">
+            <span class="helper-title">Request preview</span>
+            <span class="helper-value" id="requestUrl">https://xlnk-search.hf.space/search?q=&amp;format=json&amp;categories=general&amp;safesearch=1</span>
           </div>
         </div>
       </div>
@@ -81,6 +77,27 @@
   <main class="main">
     <div id="status" class="status"></div>
     <div id="results" class="results"></div>
+    <section class="education">
+      <h2>How this demo works</h2>
+      <div class="edu-grid">
+        <article>
+          <h3>1. Input becomes a URL</h3>
+          <p>Your search text is turned into the <strong>q</strong> parameter on the SearXNG endpoint. SafeSearch and category tabs add extra parameters.</p>
+        </article>
+        <article>
+          <h3>2. Meta-search aggregation</h3>
+          <p>SearXNG gathers results from multiple public sources and returns a unified list for the demo to display.</p>
+        </article>
+        <article>
+          <h3>3. Privacy first</h3>
+          <p>No logins, no tracking scripts, and no saved history. Everything happens directly in your browser.</p>
+        </article>
+        <article>
+          <h3>4. Frontend-only API use</h3>
+          <p>The demo fetches JSON from a public API and renders clean result cards instantly — perfect for learning how web apps consume open data.</p>
+        </article>
+      </div>
+    </section>
   </main>
 
   <script src="app.js"></script>
