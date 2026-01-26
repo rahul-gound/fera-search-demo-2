@@ -18,14 +18,9 @@
 
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Fast. Safe. Bright.</p>
-        <h1>Search the open web with a vibrant orange experience.</h1>
-        <p class="lead">Run flexible queries, tune SafeSearch, and focus results by location — all in a clean white-and-orange workspace.</p>
-        <div class="pill-row">
-          <span class="pill">No login required</span>
-          <span class="pill">Powered by HF Space</span>
-          <span class="pill">SearXNG compatible</span>
-        </div>
+        <p class="eyebrow">Privacy-first meta search</p>
+        <h1>fera-search</h1>
+        <p class="lead">A clean, exhibition-ready search experience that turns your input into real SearXNG queries — no tracking, no logins, no ads.</p>
       </div>
 
       <div class="hero-card">
@@ -38,34 +33,15 @@
           <div class="control">
             <label for="safesearch">SafeSearch</label>
             <select id="safesearch">
-              <option value="moderate" selected>Moderate</option>
-              <option value="off">Off</option>
-              <option value="strict">Strict</option>
+              <option value="1" selected>Moderate</option>
+              <option value="0">Off</option>
+              <option value="2">Strict</option>
             </select>
           </div>
 
           <div class="control">
-            <label for="location">Search by location</label>
-            <input id="location" type="text" placeholder="e.g. India, Delhi, near me" />
-          </div>
-
-          <div class="control">
-            <label for="lang">Language</label>
-            <select id="lang">
-              <option value="en" selected>English</option>
-              <option value="hi">Hindi</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="helper-row">
-          <div class="helper">
-            <span class="helper-title">Endpoint</span>
-            <span class="helper-value">https://xlnk-search.hf.space/search</span>
-          </div>
-          <div class="helper">
-            <span class="helper-title">SafeSearch</span>
-            <span class="helper-value">moderate · off · strict</span>
+            <label for="location">Location (optional)</label>
+            <input id="location" type="text" placeholder="Add a city or region" />
           </div>
         </div>
       </div>

@@ -2,7 +2,6 @@ const form = document.getElementById('searchForm');
 const queryInput = document.getElementById('q');
 const safeSelect = document.getElementById('safesearch');
 const locationInput = document.getElementById('location');
-const langSelect = document.getElementById('lang');
 const statusEl = document.getElementById('status');
 const resultsEl = document.getElementById('results');
 const tabs = Array.from(document.querySelectorAll('.tab'));
@@ -14,19 +13,24 @@ const setStatus = (message) => {
   statusEl.textContent = message;
 };
 
+const buildQuery = (allowLocationOnly = false) => {
+  const query = queryInput.value.trim();
+  const location = locationInput.value.trim();
+  if (!query) {
+    return allowLocationOnly ? location : '';
+  }
+  if (!location) {
+    return query;
+  }
+  return `${query} ${location}`;
+};
+
 const buildUrl = () => {
   const params = new URLSearchParams();
-  const query = queryInput.value.trim();
-  params.set('q', query);
+  params.set('q', buildQuery(true));
   params.set('format', 'json');
   params.set('safesearch', safeSelect.value);
-  params.set('language', langSelect.value);
-  if (locationInput.value.trim()) {
-    params.set('location', locationInput.value.trim());
-  }
-  if (activeTab !== 'all') {
-    params.set('categories', activeTab);
-  }
+  params.set('categories', activeTab === 'all' ? 'general' : activeTab);
   return `${endpoint}?${params.toString()}`;
 };
 
@@ -44,6 +48,23 @@ const renderResults = (items) => {
   items.forEach((item) => {
     const card = document.createElement('article');
     card.className = 'card';
+
+    const favicon = document.createElement('div');
+    favicon.className = 'favicon';
+    const faviconImg = document.createElement('img');
+    let hostname = '';
+    try {
+      hostname = new URL(item.url).hostname;
+    } catch (error) {
+      hostname = '';
+    }
+    if (hostname) {
+      faviconImg.src = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+      faviconImg.alt = `${hostname} logo`;
+    } else {
+      faviconImg.alt = 'Source logo';
+    }
+    favicon.appendChild(faviconImg);
 
     const row = document.createElement('div');
     row.className = 'card-row';
@@ -70,7 +91,15 @@ const renderResults = (items) => {
     content.appendChild(title);
     content.appendChild(meta);
     content.appendChild(snippet);
+    if (item.engine) {
+      const engine = document.createElement('div');
+      engine.className = 'engine';
+      engine.textContent = `Source: ${item.engine}`;
+      content.appendChild(engine);
+    }
 
+    row.appendChild(favicon);
+    row.appendChild(content);
     const imageUrl = item.img_src || item.thumbnail || item.thumbnail_src;
     if (imageUrl) {
       const img = document.createElement('img');
@@ -79,8 +108,6 @@ const renderResults = (items) => {
       img.className = 'thumb';
       row.appendChild(img);
     }
-
-    row.appendChild(content);
     card.appendChild(row);
     resultsEl.appendChild(card);
   });
@@ -88,7 +115,7 @@ const renderResults = (items) => {
 
 const handleSearch = async (event) => {
   event.preventDefault();
-  const query = queryInput.value.trim();
+  const query = buildQuery();
   if (!query) {
     setStatus('Type a search query to begin.');
     return;
@@ -120,5 +147,8 @@ tabs.forEach((tab) => {
     tabs.forEach((btn) => btn.classList.remove('active'));
     tab.classList.add('active');
     activeTab = tab.dataset.tab;
+    if (buildQuery()) {
+      handleSearch(new Event('submit'));
+    }
   });
 });
