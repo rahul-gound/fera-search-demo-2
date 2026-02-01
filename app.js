@@ -150,3 +150,48 @@ tabs.forEach((tab) => {
 });
 
 updateRequestPreview();
+
+
+// ✅ NEW: Read URL params (?q=, ?location=, ?safesearch=, ?tab=) and auto-search
+function applyUrlParamsAndSearch() {
+  const params = new URLSearchParams(window.location.search);
+
+  // 1) q
+  const q = (params.get('q') || '').trim();
+  if (q) {
+    queryInput.value = q;
+  }
+
+  // 2) location (optional)
+  const loc = (params.get('location') || '').trim();
+  if (loc) {
+    locationInput.value = loc;
+  }
+
+  // 3) safesearch (optional: off/moderate/strict)
+  const ss = (params.get('safesearch') || '').trim();
+  if (ss && Array.from(safeSelect.options).some(o => o.value === ss)) {
+    safeSelect.value = ss;
+  }
+
+  // 4) tab (optional: all/general/images/videos/news etc.)
+  const tabParam = (params.get('tab') || '').trim();
+  if (tabParam) {
+    const btn = tabs.find(b => b.dataset.tab === tabParam);
+    if (btn) {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = tabParam;
+    }
+  }
+
+  updateRequestPreview();
+
+  // If q exists, auto search once
+  if (q) {
+    handleSearch(new Event('submit'));
+  }
+}
+
+// Run once after the page is ready
+window.addEventListener('DOMContentLoaded', applyUrlParamsAndSearch);
