@@ -31,14 +31,13 @@ const buildUrl = () => {
   params.set('q', buildQuery(true));
   params.set('format', 'json');
   params.set('safesearch', safeSelect.value);
+  // SearXNG category: if UI says "all", use "general"
   params.set('categories', activeTab === 'all' ? 'general' : activeTab);
   return `${endpoint}?${params.toString()}`;
 };
 
 const updateRequestPreview = () => {
-  if (!requestUrlEl) {
-    return;
-  }
+  if (!requestUrlEl) return;
   requestUrlEl.textContent = buildUrl();
 };
 
@@ -82,6 +81,7 @@ const renderResults = (items) => {
     content.appendChild(title);
     content.appendChild(meta);
     content.appendChild(snippet);
+
     if (item.engine) {
       const engine = document.createElement('div');
       engine.className = 'engine';
@@ -111,9 +111,11 @@ const handleSearch = async (event) => {
     setStatus('Type a search query to begin.');
     return;
   }
+
   setStatus('Searching the SearXNG endpoint...');
   clearResults();
   const url = buildUrl();
+
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -143,6 +145,7 @@ tabs.forEach((tab) => {
     tab.classList.add('active');
     activeTab = tab.dataset.tab;
     updateRequestPreview();
+
     if (buildQuery()) {
       handleSearch(new Event('submit'));
     }
@@ -152,46 +155,69 @@ tabs.forEach((tab) => {
 updateRequestPreview();
 
 
-// ✅ NEW: Read URL params (?q=, ?location=, ?safesearch=, ?tab=) and auto-search
+// ✅ URL PARAM SUPPORT: ?q=...&tab=...&safesearch=...&location=...
 function applyUrlParamsAndSearch() {
   const params = new URLSearchParams(window.location.search);
 
-  // 1) q
+  // q
   const q = (params.get('q') || '').trim();
-  if (q) {
-    queryInput.value = q;
-  }
+  if (q) queryInput.value = q;
 
-  // 2) location (optional)
+  // location
   const loc = (params.get('location') || '').trim();
-  if (loc) {
-    locationInput.value = loc;
-  }
+  if (loc) locationInput.value = loc;
 
-  // 3) safesearch (optional: off/moderate/strict)
+  // safesearch
   const ss = (params.get('safesearch') || '').trim();
   if (ss && Array.from(safeSelect.options).some(o => o.value === ss)) {
     safeSelect.value = ss;
   }
 
-  // 4) tab (optional: all/general/images/videos/news etc.)
-  const tabParam = (params.get('tab') || '').trim();
+  // tab with alias mapping
+  let tabParam = (params.get('tab') || '').trim().toLowerCase();
   if (tabParam) {
-    const btn = tabs.find(b => b.dataset.tab === tabParam);
+    // Common aliases -> canonical
+    const TAB_MAP = {
+      all: "all",
+      general: "all",
+      web: "all",
+
+      image: "images",
+      images: "images",
+      img: "images",
+      photo: "images",
+      photos: "images",
+      pics: "images",
+
+      video: "videos",
+      videos: "videos",
+
+      news: "news"
+    };
+
+    tabParam = TAB_MAP[tabParam] || tabParam;
+
+    // Try to match an actual UI tab button by data-tab
+    const btn = tabs.find(b => (b.dataset.tab || "").toLowerCase() === tabParam);
+
     if (btn) {
       tabs.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      activeTab = btn.dataset.tab; // keep exact button value
+    } else {
+      // If no button exists, still set activeTab best-effort
       activeTab = tabParam;
+      // Also clear active highlight if mismatch
+      tabs.forEach(b => b.classList.remove('active'));
     }
   }
 
   updateRequestPreview();
 
-  // If q exists, auto search once
+  // auto search once if q is present
   if (q) {
     handleSearch(new Event('submit'));
   }
 }
 
-// Run once after the page is ready
 window.addEventListener('DOMContentLoaded', applyUrlParamsAndSearch);
