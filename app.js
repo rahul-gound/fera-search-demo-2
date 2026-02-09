@@ -7,7 +7,16 @@ const resultsEl = document.getElementById('results');
 const requestUrlEl = document.getElementById('requestUrl');
 const tabs = Array.from(document.querySelectorAll('.tab'));
 
-const endpoint = 'https://xlnk-search.hf.space/search';
+const searxngEndpoints = [
+  'https://xlnk-search.hf.space/search',
+  'https://huggingface.co/spaces/MaximusAI/SearXNG',
+  'https://huggingface.co/spaces/1v1/search',
+  'https://huggingface.co/spaces/localhost-llm/SearXNG',
+  'https://huggingface.co/spaces/cgycorey/searxng4',
+  'https://huggingface.co/spaces/Jharan/my-searxng',
+  'https://huggingface.co/spaces/CJJ-on-HF/SearXNG',
+];
+let currentEndpoint = '';
 let activeTab = 'all';
 
 const setStatus = (message) => {
@@ -26,14 +35,37 @@ const buildQuery = (allowLocationOnly = false) => {
   return `${query} ${location}`;
 };
 
+const normalizeEndpoint = (endpoint) => {
+  if (endpoint.includes('huggingface.co/spaces/')) {
+    const slug = endpoint.split('huggingface.co/spaces/')[1];
+    if (slug) {
+      const [owner, space] = slug.split('/').filter(Boolean);
+      if (owner && space) {
+        return `https://${owner}-${space}.hf.space/search`;
+      }
+    }
+  }
+  return endpoint.endsWith('/search') ? endpoint : `${endpoint.replace(/\/+$/, '')}/search`;
+};
+
+const pickRandomEndpoint = () => {
+  const normalized = searxngEndpoints.map(normalizeEndpoint);
+  const index = Math.floor(Math.random() * normalized.length);
+  currentEndpoint = normalized[index];
+  return currentEndpoint;
+};
+
 const buildUrl = () => {
+  if (!currentEndpoint) {
+    pickRandomEndpoint();
+  }
   const params = new URLSearchParams();
   params.set('q', buildQuery(true));
   params.set('format', 'json');
   params.set('safesearch', safeSelect.value);
   // SearXNG category: if UI says "all", use "general"
   params.set('categories', activeTab === 'all' ? 'general' : activeTab);
-  return `${endpoint}?${params.toString()}`;
+  return `${currentEndpoint}?${params.toString()}`;
 };
 
 const updateRequestPreview = () => {
@@ -114,7 +146,9 @@ const handleSearch = async (event) => {
 
   setStatus('Searching the SearXNG endpoint...');
   clearResults();
+  pickRandomEndpoint();
   const url = buildUrl();
+  updateRequestPreview();
 
   try {
     const response = await fetch(url);
