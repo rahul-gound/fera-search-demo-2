@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>fera-search local</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo-mark" aria-hidden="true">F</div>
+      <div>
+        <div class="logo">fera-search</div>
+        <div class="tag">Local metasearch</div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <form id="searchForm" class="searchbar" autocomplete="off">
+        <input id="q" type="text" placeholder="Search locally…" />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="controls">
+        <div class="control">
+          <label>Engines</label>
+          <div class="checkboxes" role="group" aria-label="Search engines">
+            <label><input type="checkbox" name="engine" value="google" checked /> Google</label>
+            <label><input type="checkbox" name="engine" value="duckduckgo" checked /> DuckDuckGo</label>
+            <label><input type="checkbox" name="engine" value="bing" checked /> Bing</label>
+          </div>
+        </div>
+        <div class="control">
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="en" selected>English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="helper-row">
+        <div class="helper">
+          <span class="helper-title">Go API</span>
+          <span class="helper-value">http://localhost:8080/api/search</span>
+        </div>
+        <div class="helper">
+          <span class="helper-title">Python quality layer</span>
+          <span class="helper-value">http://localhost:5001/process</span>
+        </div>
+        <div class="helper">
+          <span class="helper-title">JSON only</span>
+          <span class="helper-value">Local-only processing • no cloud calls</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div id="status" class="status"></div>
+    <div class="meta-row" id="metaRow">
+      <span id="searchTime"></span>
+      <span id="totalResults"></span>
+    </div>
+    <div id="suggestions" class="suggestions"></div>
+    <div id="results" class="results"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
