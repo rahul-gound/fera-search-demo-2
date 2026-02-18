@@ -17,8 +17,8 @@ const SEARCH_ENDPOINT = 'https://himanshu-711-fera-search-proxy.hf.space/search'
 let activeTab = 'all';
 
 /* ── IndexedDB History ─────────────────────────────────── */
-var DB_NAME = "fera-search";
-var STORE = "history";
+const DB_NAME = "fera-search";
+const STORE = "history";
 
 function openDB() {
   return new Promise(function (resolve, reject) {
